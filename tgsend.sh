@@ -70,34 +70,56 @@ host=$(echo "$result" | awk -F'|' '{print $2}')
 user=$(echo "$result" | awk -F'|' '{print $3}')
 
 if [[ "$BUTTON_URL" == "null" ]]; then
-  button_url="https://www.youtube.com/@frankiejun8965"
+  button_url="https://panel10.serv00.com"
 else
-  button_url=${BUTTON_URL:-"https://www.youtube.com/@frankiejun8965"}
+  button_url=${BUTTON_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"}
+fi
+
+# 添加Telegraph链接
+if [[ "$TELEGRAPH_URL" == "null" ]]; then
+  telegraph_url="https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"
+else
+  telegraph_url=${TELEGRAPH_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"}
 fi
 
 URL="https://api.telegram.org/bot${telegramBotToken}/sendMessage"
 
+# 只处理一次URL替换
 if [[ -n "$host" ]]; then
   button_url=$(replaceValue $button_url HOST $host)
+  telegraph_url=$(replaceValue $telegraph_url HOST $host)
 fi
 if [[ -n "$user" ]]; then
   button_url=$(replaceValue $button_url USER $user)
+  telegraph_url=$(replaceValue $telegraph_url USER $user)
 fi
 if [[ -n "$PASS" ]]; then
   pass=$(toBase64 $PASS)
   button_url=$(replaceValue $button_url PASS $pass)
+  telegraph_url=$(replaceValue $telegraph_url PASS $pass)
 fi
+
+# 编码URL
 encoded_url=$(urlencode "$button_url")
-#echo "encoded_url: $encoded_url"
+encoded_telegraph=$(urlencode "$telegraph_url")
+
+# 只定义一次reply_markup
 reply_markup='{
     "inline_keyboard": [
       [
         {"text": "点击查看", "url": "'"${encoded_url}"'"}
+      ],
+      [
+        {"text": "打开Terminal", "url": "'"${encoded_telegraph}"'"}
       ]
     ]
   }'
-#echo "reply_markup: $reply_markup"
-#echo "telegramBotToken:$telegramBotToken,telegramBotUserId:$telegramBotUserId"
+
+# 调试信息
+echo "第一个按钮URL: $encoded_url"
+echo "第二个按钮URL: $encoded_telegraph"
+echo "按钮结构: $reply_markup"
+
 if [[ -z ${telegramBotToken} ]]; then
   echo "未配置TG推送"
 else
@@ -116,5 +138,6 @@ else
     echo "TG推送成功"
   else
     echo "TG推送失败，请检查TG机器人token和ID"
+    echo "错误信息: $res"
   fi
 fi
