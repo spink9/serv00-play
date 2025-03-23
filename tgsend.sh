@@ -36,6 +36,10 @@ toTGMsg() {
   local user_icon="👤"
   local time_icon="⏰"
   local notify_icon="📢"
+  local login_icon="🔑"
+  local server_icon="🌐"
+  local home_icon="📁"
+  local web_icon="🌍"
 
   # 获取当前时间
   local current_time=$(date "+%Y-%m-%d %H:%M:%S")
@@ -51,15 +55,36 @@ toTGMsg() {
   local host=$(echo "$msg" | sed -n 's/.*Host:\([^,]*\).*/\1/p' | xargs)
   local user=$(echo "$msg" | sed -n 's/.*user:\([^,]*\).*/\1/p' | xargs)
   local notify_content=$(echo "$msg" | sed -E 's/.*user:[^,]*,//' | xargs)
+  
+  # 提取主机编号
+  local host_number=$(echo "$host" | sed -n 's/.*s\([0-9]*\).*/\1/p')
+  if [[ -z "$host_number" ]]; then
+    # 如果直接是数字而不是s10这种格式
+    if [[ "$host" =~ ^[0-9]+$ ]]; then
+      host_number="$host"
+    else
+      host_number="15"  # 默认值
+    fi
+  fi
+  
+  # 设置账号信息
+  local login=${LOGIN:-"nsqdkzxaxw"}
+  local ssh_server="s${host_number}.serv00.com"
+  local home_dir="/usr/home/${login}"
+  local webpanel="https://panel${host_number}.serv00.com/"
 
   # 格式化消息内容，Markdown 换行使用两个空格 + 换行
   local formatted_msg="${title}  \n\n"
   formatted_msg+="${host_icon} *主机：* ${host}  \n"
   formatted_msg+="${user_icon} *用户：* ${user}  \n"
   formatted_msg+="${time_icon} *时间：* ${current_time}  \n\n"
+  formatted_msg+="${login_icon} *Login：* ${login}  \n"
+  formatted_msg+="${server_icon} *SSH/SFTP server address：* ${ssh_server}  \n"
+  formatted_msg+="${home_icon} *Home directory：* ${home_dir}  \n"
+  formatted_msg+="${web_icon} *DevilWEB webpanel：* ${webpanel}  \n\n"
   formatted_msg+="${notify_icon} *通知内容：* ${notify_content}  \n\n"
 
-  echo -e "$formatted_msg|${host}|${user}" # 使用 -e 选项以确保换行符生效
+  echo -e "$formatted_msg|${host}|${user}|${login}|${ssh_server}|${home_dir}|${webpanel}" # 使用 -e 选项以确保换行符生效
 }
 
 telegramBotToken=${TELEGRAM_TOKEN}
@@ -68,16 +93,20 @@ result=$(toTGMsg "$message_text")
 formatted_msg=$(echo "$result" | awk -F'|' '{print $1}')
 host=$(echo "$result" | awk -F'|' '{print $2}')
 user=$(echo "$result" | awk -F'|' '{print $3}')
+login=$(echo "$result" | awk -F'|' '{print $4}')
+ssh_server=$(echo "$result" | awk -F'|' '{print $5}')
+home_dir=$(echo "$result" | awk -F'|' '{print $6}')
+webpanel=$(echo "$result" | awk -F'|' '{print $7}')
 
 if [[ "$BUTTON_URL" == "null" ]]; then
-  button_url="https://panel15.serv00.com"
+  button_url=${webpanel:-"https://panel15.serv00.com"}
 else
   button_url=${BUTTON_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5&command=ss"}
 fi
 
 # 添加Telegraph链接
 if [[ "$TELEGRAPH_URL" == "null" ]]; then
-  telegraph_url="https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5&command=ss"
+  telegraph_url="https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=${ssh_server}&username=${login}&password=dTMpM2lpa0IlWTJGIVcmWjM5&command=ss"
 else
   telegraph_url=${TELEGRAPH_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5&command=ss"}
 fi
@@ -92,6 +121,10 @@ fi
 if [[ -n "$user" ]]; then
   button_url=$(replaceValue $button_url USER $user)
   telegraph_url=$(replaceValue $telegraph_url USER $user)
+fi
+if [[ -n "$login" ]]; then
+  button_url=$(replaceValue $button_url LOGIN $login)
+  telegraph_url=$(replaceValue $telegraph_url LOGIN $login)
 fi
 if [[ -n "$PASS" ]]; then
   pass=$(toBase64 $PASS)
