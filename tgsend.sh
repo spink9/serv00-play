@@ -76,8 +76,8 @@ new_user_url=${NEW_USER_URL:-"https://panel15.serv00.com"}
 webssh_url=${WEBSSH_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5&command=ss"}
 serv00_url=${SERV00_URL:-"https://serv00.com"}
 bwh_url=${BWH_URL:-"https://bandwagonhost.com/clientarea.php"}
-bwh_special_url=${BWH_SPECIAL_URL:-"https://bwh81.net/cart.php"}
-bwh_kvm_url=${BWH_KVM_URL:-"https://bwh88.net"}
+bwh_special_url=${BWH_SPECIAL_URL:-"https://jgluul.afdsfddffasdsd.sbs/jbkljkj"}
+bwh_kvm_url=${BWH_KVM_URL:-"https://sub.sghnfjgf.filegear-sg.me/dsfdg568"}
 nezha_url=${NEZHA_URL:-"https://nazha1.dgfghh.ggff.net"}
 tianya_url=${TIANYA_URL:-"https://status.eooce.com"}
 # 新增 TCP ping URL，用于IP排查
@@ -165,8 +165,8 @@ reply_markup='{
         {"text": "搬瓦工官网", "url": "'"$bwh_url_encoded"'"}
       ],
       [
-        {"text": "搬瓦工特价面板", "url": "'"$bwh_special_url_encoded"'"},
-        {"text": "搬瓦工KVM面板", "url": "'"$bwh_kvm_url_encoded"'"}
+        {"text": "edgetunnel最新节点", "url": "'"$bwh_special_url_encoded"'"},
+        {"text": "汇聚订阅器", "url": "'"$bwh_kvm_url_encoded"'"}
       ],
       [
         {"text": "✨ 哪吒面板 ✨", "url": "'"$nezha_url_encoded"'"}
