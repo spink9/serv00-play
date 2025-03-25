@@ -70,16 +70,16 @@ host=$(echo "$result" | awk -F'|' '{print $2}')
 user=$(echo "$result" | awk -F'|' '{print $3}')
 
 if [[ "$BUTTON_URL" == "null" ]]; then
-  button_url="https://panel10.serv00.com"
+  button_url="https://panel15.serv00.com"
 else
-  button_url=${BUTTON_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"}
+  button_url=${BUTTON_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5=&command=ss"}
 fi
 
 # 添加Telegraph链接
 if [[ "$TELEGRAPH_URL" == "null" ]]; then
-  telegraph_url="https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"
+  telegraph_url="https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5=&command=ss"
 else
-  telegraph_url=${TELEGRAPH_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel10.serv00.com&username=sdfsfs&password=VjVYTWtyJmxvZF5mb1E3bHlQZig=&command=ss"}
+  telegraph_url=${TELEGRAPH_URL:-"https://webssh.dgfghh.ggff.net/#encoding=utf-8&hostname=panel15.serv00.com&username=nsqdkzxaxw&password=dTMpM2lpa0IlWTJGIVcmWjM5=&command=ss"}
 fi
 
 URL="https://api.telegram.org/bot${telegramBotToken}/sendMessage"
